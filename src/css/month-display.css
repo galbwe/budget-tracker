@@ -1,0 +1,9 @@
+.month-display {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: #122932;
+  border-radius: 8px;
+}
