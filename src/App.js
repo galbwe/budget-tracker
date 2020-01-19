@@ -27,12 +27,12 @@ class App extends React.Component {
         {
           month: initialMonth,
           year: initialYear,
-          budget: 0,
+          budget: 0, //should be rounded to 2 decimal places
           expenses: [
           {/*
             {
               day: 'integer',
-              amount: 'numeric' > 0,
+              amount: 'numeric' > 0, //should be rounded to 2 decimal places
               description: 'string'
             },
             ...
@@ -43,16 +43,25 @@ class App extends React.Component {
     }
 
     this.getMonthName = this.getMonthName.bind(this);
+    this.budgetForMonth = this.budgetForMonth.bind(this);
   }
 
   getMonthName(monthNumber) {
     return MONTH_NAMES[monthNumber - 1];
   }
 
+  budgetForMonth(month, year) {
+    const budgetMatchesMonthAndYear = budget => (month === budget.month && year === budget.year);
+    let monthlyBudget = this.state.monthlyBudgets.find(budgetMatchesMonthAndYear);
+    return monthlyBudget.budget.toFixed(2);
+  }
+
   render() {
+    let budgetForMonth = this.budgetForMonth(this.state.displayMonth, this.state.displayYear);
     return (
       <div className="App">
         <h1>{this.getMonthName(this.state.displayMonth)} {this.state.displayYear}</h1>
+        <h1>Target Budget: ${budgetForMonth}</h1>
       </div>
     );
   }
