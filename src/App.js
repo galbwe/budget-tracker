@@ -86,9 +86,9 @@ class App extends React.Component {
         <h1>{monthName} {yearName}</h1>
         <h1>Target Budget: ${budgetForMonth}</h1>
         <ul>
-          {expensesForMonth.map(expense => {
+          {expensesForMonth.map((expense, i) => {
             return (
-              <li>
+              <li key={`expense-${i}`}>
                 Date: {monthName} {expense.day} {yearName} <br />
                 Description: {expense.description} <br />
                 Amount: ${expense.amount.toFixed(2)}
