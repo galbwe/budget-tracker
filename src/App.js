@@ -18,15 +18,37 @@ const MONTH_NAMES = [
 class App extends React.Component {
   constructor(props) {
     super(props);
-    let initialMonth = 1; //HARD CODED
-    let initialYear = 2020; //HARD CODED
     this.state = {
-      displayMonth: initialMonth,
-      displayYear: initialYear,
+      displayMonth: 1,
+      displayYear: 2020,
       monthlyBudgets: [
         {
-          month: initialMonth,
-          year: initialYear,
+          month: 7,
+          year: 2019,
+          budget: 23423,
+          expenses: []
+        },
+        {
+          month: 7,
+          year: 2018,
+          budget: 48000,
+          expenses: []
+        },
+        {
+          month: 9,
+          year: 2018,
+          budget: 84392,
+          expenses: []
+        },
+        {
+          month: 8,
+          year: 2018,
+          budget: 23423,
+          expenses: []
+        },
+        {
+          month: 1,
+          year: 2020,
           budget: 50000, //should be rounded to 2 decimal places
           expenses: [ // should be empty when initialized, or pulled from
             // a cache or database on render
@@ -41,9 +63,46 @@ class App extends React.Component {
               description: 'gas'
             },
             {
+              day: 10,
+              amount: 100,
+              description: 'fast food'
+            },
+            {
               day: 7,
               amount: 1200,
               description: 'groceries'
+            }
+          ]
+        },
+        {
+          month: 12,
+          year: 2019,
+          budget: 50000,
+          expenses: [
+            {
+              day: 2,
+              amount: 20000,
+              description: 'rent'
+            },
+            {
+              day: 5,
+              amount: 500,
+              description: 'gas'
+            },
+            {
+              day: 7,
+              amount: 1150,
+              description: 'groceries'
+            },
+            {
+              day: 15,
+              amount: 450,
+              description: 'gas'
+            },
+            {
+              day: 24,
+              amount: 40000,
+              description: 'Last minute holiday shopping.'
             }
           ]
         }
@@ -52,6 +111,19 @@ class App extends React.Component {
 
     this.getMonthName = this.getMonthName.bind(this);
     this.budgetForMonth = this.budgetForMonth.bind(this);
+
+    //sort monthly budgets by date
+    this.state.monthlyBudgets.sort((a, b) => {
+      return a.year > b.year ? 1 : a.year < b.year ? -1 : a.month - b.month;
+    });
+
+    //sort each month's expenses by day
+    this.state.monthlyBudgets.map(budget => {
+      let expenses = budget.expenses.slice();
+      expenses.sort((a, b) => a.day - b.day);
+      budget.expenses = expenses;
+      return budget;
+    })
   }
 
   getMonthName(monthNumber) {
@@ -72,6 +144,7 @@ class App extends React.Component {
   }
 
   render() {
+    console.log(this.state.monthlyBudgets);
     let budgetForMonth = this.budgetForMonth(this.state.displayMonth, this.state.displayYear);
     let expensesForMonth = this.expensesForMonth(this.state.displayMonth, this.state.displayYear);
     let monthName = this.getMonthName(this.state.displayMonth);
