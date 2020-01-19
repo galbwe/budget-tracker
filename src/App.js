@@ -23,6 +23,9 @@ class App extends React.Component {
 
     this.getMonthName = this.getMonthName.bind(this);
     this.budgetForMonth = this.budgetForMonth.bind(this);
+    this.getDisplayMonthIndex = this.getDisplayMonthIndex.bind(this);
+    this.displayNextMonth = this.displayNextMonth.bind(this);
+    this.displayPreviousMonth = this.displayPreviousMonth.bind(this);
 
     //sort monthly budgets by date
     this.state.monthlyBudgets.sort((a, b) => {
@@ -55,6 +58,43 @@ class App extends React.Component {
     return monthlyBudget.expenses;
   }
 
+  getDisplayMonthIndex(month, year) {
+    const budgetMatchesMonthAndYear = budget => (month === budget.month && year === budget.year);
+    return this.state.monthlyBudgets.findIndex(budgetMatchesMonthAndYear);
+  }
+
+  displayNextMonth() {
+    // get display month index
+    let i = this.getDisplayMonthIndex(this.state.displayMonth, this.state.displayYear);
+    // check if index is last in the array of montly budgets
+    if (i === this.state.monthlyBudgets.length - 1) {
+      return;
+    }
+    // if not, get month and year of the next montly budget in the list
+    let nextBudget = this.state.monthlyBudgets[i+1];
+    // set state so that the next month and yera show
+    this.setState({
+      displayMonth: nextBudget.month,
+      displayYear: nextBudget.year,
+    });
+  }
+
+  displayPreviousMonth() {
+    // get display month index
+    let i = this.getDisplayMonthIndex(this.state.displayMonth, this.state.displayYear);
+    // check if index is first in the array of montly budgets
+    if (i === 0) {
+      return;
+    }
+    // if not, get month and year of the previous montly budget in the list
+    let prevBudget = this.state.monthlyBudgets[i-1];
+    // set state so that the previous month and yera show
+    this.setState({
+      displayMonth: prevBudget.month,
+      displayYear: prevBudget.year,
+    });
+  }
+
   render() {
     console.log(this.state.monthlyBudgets);
     let budgetForMonth = this.budgetForMonth(this.state.displayMonth, this.state.displayYear);
@@ -69,6 +109,10 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>{monthName} {yearName}</h1>
+        <div class="button-display">
+          <button onClick={this.displayPreviousMonth}>Last Month</button>
+          <button onClick={this.displayNextMonth}>Next Month</button>
+        </div>
         <h1>Target Budget: ${budgetForMonth}</h1>
         <ul>
           {expensesForMonth.map((expense, i) => {
