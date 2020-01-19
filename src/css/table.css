@@ -1,0 +1,22 @@
+.table {
+  background: #F6F7F4;
+  border-radius: 8px;
+}
+
+.table td, .table {
+  border-top: none;
+}
+
+.table thead {
+  font-weight: 700;
+  font-size: 1.3em;
+}
+
+.table tbody td, .table thead td {
+  border-top: 1px solid #CBD8D5;
+  border-right: 1px solid #CBD8D5;
+}
+
+.table td:last-of-type {
+  border-right: none;
+}

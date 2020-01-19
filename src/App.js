@@ -1,5 +1,7 @@
 import React from 'react';
 import { initialState } from './initialState.js';
+import './css/index.css';
+import './css/table.css';
 
 const MONTH_NAMES = [
   'January',
@@ -107,24 +109,31 @@ class App extends React.Component {
       }, 0);
     let budgetLeft = budgetForMonth - totalExpensesForCurrentMonth;
     return (
-      <div className="App">
+      <div className="App container">
         <h1>{monthName} {yearName}</h1>
         <div class="button-display">
           <button onClick={this.displayPreviousMonth}>Last Month</button>
           <button onClick={this.displayNextMonth}>Next Month</button>
         </div>
         <h1>Target Budget: ${budgetForMonth}</h1>
-        <ul>
+        <table className="table">
+          <thead>
+            <td>Date</td>
+            <td>Description</td>
+            <td>Amount</td>
+          </thead>
+          <tbody>
           {expensesForMonth.map((expense, i) => {
             return (
-              <li key={`expense-${i}`}>
-                Date: {monthName} {expense.day} {yearName} <br />
-                Description: {expense.description} <br />
-                Amount: ${expense.amount.toFixed(2)}
-              </li>
+              <tr key={`expense-${i}`}>
+                <td>{monthName} {expense.day} {yearName}</td>
+                <td>{expense.description} </td>
+                <td>${expense.amount.toFixed(2)}</td>
+              </tr>
             )
           })}
-        </ul>
+          </tbody>
+        </table>
         <h1>Total Expenses: ${totalExpensesForCurrentMonth.toFixed(2)} </h1>
         <h1>Budget Left: ${budgetLeft.toFixed(2)}</h1>
       </div>
