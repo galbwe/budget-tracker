@@ -1,5 +1,5 @@
 import React from 'react';
-import intialState from 'initialState';
+import { initialState } from './initialState.js';
 
 const MONTH_NAMES = [
   'January',
@@ -20,7 +20,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = initialState;
-    }
 
     this.getMonthName = this.getMonthName.bind(this);
     this.budgetForMonth = this.budgetForMonth.bind(this);

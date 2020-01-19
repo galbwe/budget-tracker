@@ -1,4 +1,4 @@
-initialState = {
+export const initialState = {
   displayMonth: 1,
   displayYear: 2020,
   monthlyBudgets: [
@@ -86,5 +86,5 @@ initialState = {
         }
       ]
     }
-
-export default initialState;
+  ]
+}
