@@ -27,7 +27,7 @@ class App extends React.Component {
         {
           month: initialMonth,
           year: initialYear,
-          budget: 0, //should be rounded to 2 decimal places
+          budget: 50000, //should be rounded to 2 decimal places
           expenses: [ // should be empty when initialized, or pulled from
             // a cache or database on render
             {
@@ -76,6 +76,11 @@ class App extends React.Component {
     let expensesForMonth = this.expensesForMonth(this.state.displayMonth, this.state.displayYear);
     let monthName = this.getMonthName(this.state.displayMonth);
     let yearName = this.state.displayYear;
+    let totalExpensesForCurrentMonth = expensesForMonth
+      .reduce((agg, next) => {
+        return agg + next.amount
+      }, 0);
+    let budgetLeft = budgetForMonth - totalExpensesForCurrentMonth;
     return (
       <div className="App">
         <h1>{monthName} {yearName}</h1>
@@ -91,7 +96,8 @@ class App extends React.Component {
             )
           })}
         </ul>
-        <h1>Total Expenses: {totalExpensesForCurrentMonth} </h1>
+        <h1>Total Expenses: ${totalExpensesForCurrentMonth.toFixed(2)} </h1>
+        <h1>Budget Left: ${budgetLeft.toFixed(2)}</h1>
       </div>
     );
   }
