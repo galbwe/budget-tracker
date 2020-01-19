@@ -28,17 +28,25 @@ class App extends React.Component {
           month: initialMonth,
           year: initialYear,
           budget: 0, //should be rounded to 2 decimal places
-          expenses: [
-          {/*
+          expenses: [ // should be empty when initialized, or pulled from
+            // a cache or database on render
             {
-              day: 'integer',
-              amount: 'numeric' > 0, //should be rounded to 2 decimal places
-              description: 'string'
+              day: 2,
+              amount: 20000, //should be rounded to 2 decimal places
+              description: 'rent'
             },
-            ...
-          */}
-        ]
-           }
+            {
+              day: 4,
+              amount: 400,
+              description: 'gas'
+            },
+            {
+              day: 7,
+              amount: 1200,
+              description: 'groceries'
+            }
+          ]
+        }
       ]
     }
 
@@ -56,12 +64,34 @@ class App extends React.Component {
     return monthlyBudget.budget.toFixed(2);
   }
 
+  // 2020-01-18 This contains repeated code from this.budgetForMonth. Find a way to refactor.
+  expensesForMonth(month, year) {
+    const budgetMatchesMonthAndYear = budget => (month === budget.month && year === budget.year);
+    let monthlyBudget = this.state.monthlyBudgets.find(budgetMatchesMonthAndYear);
+    return monthlyBudget.expenses;
+  }
+
   render() {
     let budgetForMonth = this.budgetForMonth(this.state.displayMonth, this.state.displayYear);
+    let expensesForMonth = this.expensesForMonth(this.state.displayMonth, this.state.displayYear);
+    let monthName = this.getMonthName(this.state.displayMonth);
+    let yearName = this.state.displayYear;
     return (
       <div className="App">
-        <h1>{this.getMonthName(this.state.displayMonth)} {this.state.displayYear}</h1>
+        <h1>{monthName} {yearName}</h1>
         <h1>Target Budget: ${budgetForMonth}</h1>
+        <ul>
+          {expensesForMonth.map(expense => {
+            return (
+              <li>
+                Date: {monthName} {expense.day} {yearName} <br />
+                Description: {expense.description} <br />
+                Amount: ${expense.amount.toFixed(2)}
+              </li>
+            )
+          })}
+        </ul>
+        <h1>Total Expenses: {totalExpensesForCurrentMonth} </h1>
       </div>
     );
   }
