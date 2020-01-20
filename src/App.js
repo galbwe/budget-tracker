@@ -1,5 +1,5 @@
 import React from 'react';
-import { initialState } from './initialState.js';
+// import { initialState } from './initialState.js';
 import './css/index.css';
 import './css/month-display.css'
 import './css/table.css';
@@ -22,13 +22,33 @@ const MONTH_NAMES = [
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = initialState;
+    this.state = {
+      newExpense: {
+        day: 1,
+        description: '',
+        amount: 0,
+      },
+      displayMonth: 1,
+      displayYear: 2020,
+      monthlyBudgets: [
+        {
+          month: 1,
+          year: 2020,
+          budget: 50000, //should be rounded to 2 decimal places
+          expenses: [],
+        }
+      ]
+    }
 
     this.getMonthName = this.getMonthName.bind(this);
     this.budgetForMonth = this.budgetForMonth.bind(this);
     this.getDisplayMonthIndex = this.getDisplayMonthIndex.bind(this);
     this.displayNextMonth = this.displayNextMonth.bind(this);
     this.displayPreviousMonth = this.displayPreviousMonth.bind(this);
+    this.addNewExpense = this.addNewExpense.bind(this);
+    this.updateNewExpenseDay = this.updateNewExpenseDay.bind(this);
+    this.updateNewExpenseDescription = this.updateNewExpenseDescription.bind(this);
+    this.updateNewExpenseAmount = this.updateNewExpenseAmount.bind(this);
 
     //sort monthly budgets by date
     this.state.monthlyBudgets.sort((a, b) => {
@@ -98,8 +118,55 @@ class App extends React.Component {
     });
   }
 
+  addNewExpense(ev) {
+    ev.preventDefault();
+    let i = this.getDisplayMonthIndex(this.state.displayMonth, this.state.displayYear);
+    this.setState((state, props) => {
+      let budget = state.monthlyBudgets[i];
+      budget.expenses.push({
+        amount: parseFloat(state.newExpense.amount),
+        day: state.newExpense.day,
+        description: state.newExpense.description,
+      });
+      budget.expenses.sort((a, b) => a.day - b.day);
+      state.monthlyBudgets[i] = budget;
+      state.newExpense = {
+        day: 1,
+        description: '',
+        amount: '',
+      }
+      return state;
+    });
+  }
+
+  updateNewExpenseDay(event) {
+    event.preventDefault();
+    let day = parseInt(event.target.options[event.target.selectedIndex].text);
+    this.setState((state, props) => {
+      state.newExpense.day = day;
+      return state;
+    })
+  }
+
+  updateNewExpenseAmount(event) {
+    event.preventDefault();
+    let amount = event.target.value;
+    this.setState((state, props) => {
+      state.newExpense.amount = amount;
+      return state;
+    })
+  }
+
+  updateNewExpenseDescription(event) {
+    event.preventDefault();
+    let description = event.target.value;
+    this.setState((state, props) => {
+      state.newExpense.description = description;
+      return state;
+    })
+  }
+
   render() {
-    console.log(this.state.monthlyBudgets);
     let budgetForMonth = this.budgetForMonth(this.state.displayMonth, this.state.displayYear);
     let expensesForMonth = this.expensesForMonth(this.state.displayMonth, this.state.displayYear);
     let monthName = this.getMonthName(this.state.displayMonth);
@@ -109,6 +176,13 @@ class App extends React.Component {
         return agg + next.amount
       }, 0);
     let budgetLeft = budgetForMonth - totalExpensesForCurrentMonth;
+    // oversimplified. Will need to modifiy later to account for number of days
+    // in each month
+    let daysInMonth = [];
+    for (let i = 1; i < 32; i++) {
+      daysInMonth.push(i);
+    }
+
     return (
       <div className="App container">
         <div className="month-display">
@@ -120,9 +194,11 @@ class App extends React.Component {
         <h1>Target Budget: ${budgetForMonth}</h1>
         <table className="table">
           <thead>
-            <td>Date</td>
-            <td>Description</td>
-            <td>Amount</td>
+            <tr>
+              <td>Date</td>
+              <td>Description</td>
+              <td>Amount</td>
+            </tr>
           </thead>
           <tbody>
           {expensesForMonth.map((expense, i) => {
@@ -136,6 +212,17 @@ class App extends React.Component {
           })}
           </tbody>
         </table>
+        <form className="new-expense-form">
+          <select onChange={this.updateNewExpenseDay}>
+            {daysInMonth.map(i => {
+              return <option key={`day-${i}`} value>{i}</option>
+            })}
+          </select>
+          <input type="text" value={this.state.newExpense.description} placeholder="Describe Expense" onChange={this.updateNewExpenseDescription}/>
+          <input type="text" value={this.state.newExpense.amount} placeholder="$9999.99" onChange={this.updateNewExpenseAmount}/>
+          <button className="btn btn-primary" onClick={this.addNewExpense}>+</button>
+        </form>
+
         <h1>Total Expenses: ${totalExpensesForCurrentMonth.toFixed(2)} </h1>
         <h1>Budget Left: ${budgetLeft.toFixed(2)}</h1>
       </div>

@@ -1,4 +1,9 @@
 export const initialState = {
+  newExpense: {
+    day: 1,
+    description: '',
+    amount: 0,
+  },
   displayMonth: 1,
   displayYear: 2020,
   monthlyBudgets: [
