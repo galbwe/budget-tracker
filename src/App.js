@@ -222,6 +222,17 @@ class App extends React.Component {
           </tbody>
         </table>
 
+        <form className="new-expense-form">
+          <select onChange={this.updateNewExpenseDay}>
+            {daysInMonth.map(i => {
+              return <option key={`day-${i}`} value>{i}</option>
+            })}
+          </select>
+          <input type="text" value={this.state.newExpense.description} placeholder="Describe Expense" onChange={this.updateNewExpenseDescription}/>
+          <input type="text" value={this.state.newExpense.amount} placeholder="$9999.99" onChange={this.updateNewExpenseAmount}/>
+          <button className="btn btn-primary" onClick={this.addNewExpense}>+</button>
+        </form>
+
         <table className="table">
           <thead>
             <tr>
@@ -243,16 +254,7 @@ class App extends React.Component {
           })}
           </tbody>
         </table>
-        <form className="new-expense-form">
-          <select onChange={this.updateNewExpenseDay}>
-            {daysInMonth.map(i => {
-              return <option key={`day-${i}`} value>{i}</option>
-            })}
-          </select>
-          <input type="text" value={this.state.newExpense.description} placeholder="Describe Expense" onChange={this.updateNewExpenseDescription}/>
-          <input type="text" value={this.state.newExpense.amount} placeholder="$9999.99" onChange={this.updateNewExpenseAmount}/>
-          <button className="btn btn-primary" onClick={this.addNewExpense}>+</button>
-        </form>
+
 
 
       </div>
