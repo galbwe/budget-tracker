@@ -39,6 +39,8 @@ class App extends React.Component {
         {
           month: 1,
           year: 2020,
+          month: currentMonth,
+          year: currentYear,
           budget: 50000, //should be rounded to 2 decimal places
           expenses: [],
         }
