@@ -101,13 +101,26 @@ class App extends React.Component {
   displayNextMonth() {
     // get display month index
     let i = this.getDisplayMonthIndex(this.state.displayMonth, this.state.displayYear);
+    let nextBudget;
     // check if index is last in the array of montly budgets
     if (i === this.state.monthlyBudgets.length - 1) {
-      return;
+      //create a new monthlyBudget
+      nextBudget = {
+        month: this.state.displayMonth === 12 ? 1 : this.state.displayMonth + 1,
+        year: this.state.displayMonth === 12 ? this.state.displayYear + 1 : this.state.displayYear,
+        budget: this.state.monthlyBudgets[i].budget,
+        expenses: []
+      }
+      this.setState((state, props) => {
+        state.monthlyBudgets.push(nextBudget);
+        return state;
+      })
+    } else {
+      // if not, get month and year of the next montly budget in the list
+      nextBudget = this.state.monthlyBudgets[i+1];
     }
-    // if not, get month and year of the next montly budget in the list
-    let nextBudget = this.state.monthlyBudgets[i+1];
-    // set state so that the next month and yera show
+
+    // set state so that the next month and year show
     this.setState({
       displayMonth: nextBudget.month,
       displayYear: nextBudget.year,
@@ -117,13 +130,26 @@ class App extends React.Component {
   displayPreviousMonth() {
     // get display month index
     let i = this.getDisplayMonthIndex(this.state.displayMonth, this.state.displayYear);
+    let prevBudget;
     // check if index is first in the array of montly budgets
     if (i === 0) {
-      return;
+      //create a new monthlyBudget
+     prevBudget = {
+        month: this.state.displayMonth === 1 ? 12 : this.state.displayMonth - 1,
+        year: this.state.displayMonth === 1 ? this.state.displayYear - 1 : this.state.displayYear,
+        budget: this.state.monthlyBudgets[i].budget,
+        expenses: []
+      }
+      this.setState((state, props) => {
+        state.monthlyBudgets.unshift(prevBudget);
+        return state;
+      })
+    } else {
+      // if not, get month and year of the previous montly budget in the list
+      prevBudget = this.state.monthlyBudgets[i-1];
     }
-    // if not, get month and year of the previous montly budget in the list
-    let prevBudget = this.state.monthlyBudgets[i-1];
-    // set state so that the previous month and yera show
+
+    // set state so that the previous month and year show
     this.setState({
       displayMonth: prevBudget.month,
       displayYear: prevBudget.year,
