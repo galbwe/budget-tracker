@@ -161,8 +161,17 @@ class App extends React.Component {
     let i = this.getDisplayMonthIndex(this.state.displayMonth, this.state.displayYear);
     this.setState((state, props) => {
       let budget = state.monthlyBudgets[i];
+      let amount = state.newExpense.amount;
+      amount = amount.replace(/[^.0-9]/g, ''); // remove all non digit characters
+      let numberDecimals = amount.split('.').length - 1
+      if (typeof numberDecimals === 'undefined' || numberDecimals > 1) {
+        return;
+      }
+      if (amount.length === 0) {
+        return; // in case all characters were removed, or an empty string was entered
+      }
       budget.expenses.push({
-        amount: parseFloat(state.newExpense.amount),
+        amount: parseFloat(amount),
         day: state.newExpense.day,
         description: state.newExpense.description,
       });
