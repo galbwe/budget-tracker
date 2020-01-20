@@ -23,14 +23,17 @@ const MONTH_NAMES = [
 class App extends React.Component {
   constructor(props) {
     super(props);
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth() + 1;
+    let currentYear = currentDate.getFullYear();
     this.state = {
       newExpense: {
         day: 1,
         description: '',
         amount: 0,
       },
-      displayMonth: 1,
-      displayYear: 2020,
+      displayMonth: currentMonth,
+      displayYear: currentYear,
       newBudgetAmount: "",
       monthlyBudgets: [
         {
