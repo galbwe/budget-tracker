@@ -20,4 +20,12 @@
 
 .table td:last-of-type {
   border-right: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.table .btn {
+  width: 60px;
+  height: 40px;
 }

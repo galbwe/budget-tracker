@@ -377,16 +377,12 @@ class App extends React.Component {
               <tr key={`expense-${i}`}>
                 <td>{monthName} {expense.day} {yearName}</td>
                 <td>{expense.description} </td>
-                <td>${expense.amount.toFixed(2)}</td>
-                <td><button className="btn btn-light" onClick={this.removeExpense(i)}>-</button></td>
+                <td>${expense.amount.toFixed(2)} <button className="btn btn-danger" onClick={this.removeExpense(i)}>-</button></td>
               </tr>
             )
           })}
           </tbody>
         </table>
-
-
-
       </div>
     );
   }
