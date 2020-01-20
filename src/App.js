@@ -359,7 +359,7 @@ class App extends React.Component {
               <label for="new-expense-amount">Amount</label>
               <input id="new-expense-amount" type="text" className="form-control" value={this.state.newExpense.amount} placeholder="$9999.99" onChange={this.updateNewExpenseAmount}/>
             </div>
-            <button type="submit" className="btn btn-light" onClick={this.addNewExpense}>Add Expense</button>
+            <button type="submit" className="btn btn-dark" onClick={this.addNewExpense}>Add Expense</button>
           </fieldset>
         </form>
 
