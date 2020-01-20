@@ -1,8 +1,9 @@
 import React from 'react';
 // import { initialState } from './initialState.js';
 import './css/index.css';
-import './css/month-display.css'
+import './css/month-display.css';
 import './css/table.css';
+import './css/add-expense-form.css';
 
 const MONTH_NAMES = [
   'January',
@@ -223,14 +224,26 @@ class App extends React.Component {
         </table>
 
         <form className="new-expense-form">
-          <select onChange={this.updateNewExpenseDay}>
-            {daysInMonth.map(i => {
-              return <option key={`day-${i}`} value>{i}</option>
-            })}
-          </select>
-          <input type="text" value={this.state.newExpense.description} placeholder="Describe Expense" onChange={this.updateNewExpenseDescription}/>
-          <input type="text" value={this.state.newExpense.amount} placeholder="$9999.99" onChange={this.updateNewExpenseAmount}/>
-          <button className="btn btn-primary" onClick={this.addNewExpense}>+</button>
+          <fieldset>
+            <legend>Enter New Expense:</legend>
+            <div className="form-group">
+              <label for="new-expense-day">Day</label>
+              <select id="new-expense-day" className="custom-select" onChange={this.updateNewExpenseDay}>
+                {daysInMonth.map(i => {
+                  return <option key={`day-${i}`} value>{i}</option>
+                })}
+              </select>
+            </div>
+            <div className="form-group">
+              <label for="new-expense-description">Description</label>
+              <input id="new-expense-description" type="text" className="form-control" value={this.state.newExpense.description} placeholder="Describe Expense" onChange={this.updateNewExpenseDescription}/>
+            </div>
+            <div className="form-group">
+              <label for="new-expense-amount">Amount</label>
+              <input id="new-expense-amount" type="text" className="form-control" value={this.state.newExpense.amount} placeholder="$9999.99" onChange={this.updateNewExpenseAmount}/>
+            </div>
+            <button type="submit" className="btn btn-primary" onClick={this.addNewExpense}>Add Expense</button>
+          </fieldset>
         </form>
 
         <table className="table">
