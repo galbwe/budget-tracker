@@ -8,17 +8,27 @@
   border: none;
 }
 
-#root .btn-primary {
+#root .btn-light {
   background: #F6F7F4;
   border-color: #F6F7F4;
   color: #122932;
 }
 
-#root .btn-primary:focus{
+#root .btn-dark {
+  background:  #CBD8D5;
+  color: #122932;
+  outline: #122932;
+}
+
+#root .btn-light:focus{
   box-shadow: 0px 0px 2px 1px #F8F5B9;
   border: 2px solid #F8F5B9;
 }
 
 #root h1.header-light {
   color: #F6F7F4;
+}
+
+#root .point-on-hover:hover {
+  cursor: pointer;
 }

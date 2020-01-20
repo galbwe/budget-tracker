@@ -1,0 +1,11 @@
+.change-budget-form .form-inline {
+  justify-content: flex-start;
+}
+
+.change-budget-form .button-group {
+  margin-left: 20px;
+}
+
+.change-budget-form .btn {
+  margin: 0 5px;
+}

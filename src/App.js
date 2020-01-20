@@ -1,9 +1,9 @@
 import React from 'react';
-// import { initialState } from './initialState.js';
 import './css/index.css';
 import './css/month-display.css';
 import './css/table.css';
 import './css/add-expense-form.css';
+import './css/change-budget-form.css'
 
 const MONTH_NAMES = [
   'January',
@@ -17,7 +17,7 @@ const MONTH_NAMES = [
   'September',
   'October',
   'November',
-  'December'
+  'December',
 ]
 
 class App extends React.Component {
@@ -31,6 +31,7 @@ class App extends React.Component {
       },
       displayMonth: 1,
       displayYear: 2020,
+      newBudgetAmount: "",
       monthlyBudgets: [
         {
           month: 1,
@@ -51,6 +52,12 @@ class App extends React.Component {
     this.updateNewExpenseDescription = this.updateNewExpenseDescription.bind(this);
     this.updateNewExpenseAmount = this.updateNewExpenseAmount.bind(this);
     this.removeExpense = this.removeExpense.bind(this);
+    this.editCurrentTargetBudget = this.editCurrentTargetBudget.bind(this);
+    this.renderTargetBudget = this.renderTargetBudget.bind(this);
+    this.toggleEditBudgetField = this.toggleEditBudgetField.bind(this);
+    this.updateNewBudgetAmount = this.updateNewBudgetAmount.bind(this);
+    this.handleNewBudgetSubmit = this.handleNewBudgetSubmit.bind(this);
+    this.handleNewBudgetBack = this.handleNewBudgetBack.bind(this);
 
     //sort monthly budgets by date
     this.state.monthlyBudgets.sort((a, b) => {
@@ -181,6 +188,86 @@ class App extends React.Component {
     }
   }
 
+  editCurrentTargetBudget(newAmount) {
+    let month = this.state.displayMonth;
+    let year = this.state.displayYear;
+    let i = this.getDisplayMonthIndex(month, year);
+    this.setState((state, props) => {
+      let budget = state.monthlyBudgets[i];
+      budget.budget = newAmount;
+      state.monthlyBudgets[i] = budget;
+      return state;
+    })
+  }
+
+  toggleEditBudgetField() {
+    this.setState({
+      showEditBudgetField: !this.state.showEditBudgetField,
+    })
+  }
+
+  updateNewBudgetAmount(ev) {
+    ev.preventDefault();
+    let newAmount = ev.target.value;
+    this.setState({
+      newBudgetAmount: newAmount
+    });
+  }
+
+  handleNewBudgetSubmit(ev) {
+    ev.preventDefault();
+    let month = this.state.displayMonth;
+    let year = this.state.displayYear;
+    console.log('month = ' + month);
+    console.log('year = ' + year);
+    let i = this.getDisplayMonthIndex(month, year);
+    console.log('i = ' + i);
+    let newBudgetAmount = parseFloat(this.state.newBudgetAmount);
+    console.log('newBudgetAmount = ' + newBudgetAmount);
+    this.setState((state, props) => {
+      let budget = state.monthlyBudgets[i];
+      console.log('budget = ' + budget);
+      budget.budget = newBudgetAmount;
+      state.newBudgetAmount = '';
+      state.monthlyBudgets[i] = budget;
+      return state;
+    })
+    this.toggleEditBudgetField();
+  }
+
+  handleNewBudgetBack(ev) {
+    ev.preventDefault();
+    this.setState({
+      newBudgetAmount: '',
+    })
+    this.toggleEditBudgetField();
+  }
+
+  renderTargetBudget(budgetForMonth) {
+    if (!this.state.showEditBudgetField) {
+      return (
+        <tr>
+          <td>Target Budget</td>
+          <td className="point-on-hover" title="double click to edit" onDoubleClick={this.toggleEditBudgetField}>${budgetForMonth}</td>
+        </tr>
+      )
+    }
+    return (
+      <tr className="change-budget-form">
+        <td>Target Budget</td>
+        <td>
+          <form className="form-inline">
+            <input value={this.state.newBudgetAmount} onChange={this.updateNewBudgetAmount} className="form-control" type="text" placeholder="New budget amount." />
+            <div className="button-group">
+              <button onClick={this.handleNewBudgetSubmit} className="btn btn-dark">Submit</button>
+              <button onClick={this.handleNewBudgetBack} className="btn btn-dark">Back</button>
+            </div>
+          </form>
+        </td>
+      </tr>
+    )
+  }
+
   render() {
     let budgetForMonth = this.budgetForMonth(this.state.displayMonth, this.state.displayYear);
     let expensesForMonth = this.expensesForMonth(this.state.displayMonth, this.state.displayYear);
@@ -201,17 +288,14 @@ class App extends React.Component {
     return (
       <div className="App container">
         <div className="month-display">
-          <button className="btn btn-primary" onClick={this.displayPreviousMonth}>Last Month</button>
+          <button className="btn btn-light" onClick={this.displayPreviousMonth}>Last Month</button>
           <h1 className="header-light">{monthName} {yearName}</h1>
-          <button className="btn btn-primary" onClick={this.displayNextMonth}>Next Month</button>
+          <button className="btn btn-light" onClick={this.displayNextMonth}>Next Month</button>
         </div>
 
         <table className="table">
           <tbody>
-            <tr>
-              <td>Target Budget</td>
-              <td>${budgetForMonth}</td>
-            </tr>
+            {this.renderTargetBudget(budgetForMonth)}
             <tr>
               <td>Total Expenses</td>
               <td>${totalExpensesForCurrentMonth.toFixed(2)}</td>
@@ -242,7 +326,7 @@ class App extends React.Component {
               <label for="new-expense-amount">Amount</label>
               <input id="new-expense-amount" type="text" className="form-control" value={this.state.newExpense.amount} placeholder="$9999.99" onChange={this.updateNewExpenseAmount}/>
             </div>
-            <button type="submit" className="btn btn-primary" onClick={this.addNewExpense}>Add Expense</button>
+            <button type="submit" className="btn btn-light" onClick={this.addNewExpense}>Add Expense</button>
           </fieldset>
         </form>
 
@@ -261,7 +345,7 @@ class App extends React.Component {
                 <td>{monthName} {expense.day} {yearName}</td>
                 <td>{expense.description} </td>
                 <td>${expense.amount.toFixed(2)}</td>
-                <td><button className="btn btn-primary" onClick={this.removeExpense(i)}>-</button></td>
+                <td><button className="btn btn-light" onClick={this.removeExpense(i)}>-</button></td>
               </tr>
             )
           })}
