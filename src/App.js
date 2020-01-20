@@ -30,15 +30,13 @@ class App extends React.Component {
       newExpense: {
         day: 1,
         description: '',
-        amount: 0,
+        amount: '',
       },
       displayMonth: currentMonth,
       displayYear: currentYear,
       newBudgetAmount: "",
       monthlyBudgets: [
         {
-          month: 1,
-          year: 2020,
           month: currentMonth,
           year: currentYear,
           budget: 50000, //should be rounded to 2 decimal places
