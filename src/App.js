@@ -218,15 +218,10 @@ class App extends React.Component {
     ev.preventDefault();
     let month = this.state.displayMonth;
     let year = this.state.displayYear;
-    console.log('month = ' + month);
-    console.log('year = ' + year);
     let i = this.getDisplayMonthIndex(month, year);
-    console.log('i = ' + i);
     let newBudgetAmount = parseFloat(this.state.newBudgetAmount);
-    console.log('newBudgetAmount = ' + newBudgetAmount);
     this.setState((state, props) => {
       let budget = state.monthlyBudgets[i];
-      console.log('budget = ' + budget);
       budget.budget = newBudgetAmount;
       state.newBudgetAmount = '';
       state.monthlyBudgets[i] = budget;
