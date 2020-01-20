@@ -205,7 +205,23 @@ class App extends React.Component {
           <button className="btn btn-primary" onClick={this.displayNextMonth}>Next Month</button>
         </div>
 
-        <h1>Target Budget: ${budgetForMonth}</h1>
+        <table className="table">
+          <tbody>
+            <tr>
+              <td>Target Budget</td>
+              <td>${budgetForMonth}</td>
+            </tr>
+            <tr>
+              <td>Total Expenses</td>
+              <td>${totalExpensesForCurrentMonth.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td>Budget Left</td>
+              <td>${budgetLeft.toFixed(2)}</td>
+            </tr>
+          </tbody>
+        </table>
+
         <table className="table">
           <thead>
             <tr>
@@ -238,8 +254,7 @@ class App extends React.Component {
           <button className="btn btn-primary" onClick={this.addNewExpense}>+</button>
         </form>
 
-        <h1>Total Expenses: ${totalExpensesForCurrentMonth.toFixed(2)} </h1>
-        <h1>Budget Left: ${budgetLeft.toFixed(2)}</h1>
+
       </div>
     );
   }
