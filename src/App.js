@@ -49,6 +49,7 @@ class App extends React.Component {
     this.updateNewExpenseDay = this.updateNewExpenseDay.bind(this);
     this.updateNewExpenseDescription = this.updateNewExpenseDescription.bind(this);
     this.updateNewExpenseAmount = this.updateNewExpenseAmount.bind(this);
+    this.removeExpense = this.removeExpense.bind(this);
 
     //sort monthly budgets by date
     this.state.monthlyBudgets.sort((a, b) => {
@@ -166,6 +167,19 @@ class App extends React.Component {
     })
   }
 
+  removeExpense(i) {
+    return event => {
+      event.preventDefault();
+      let j = this.getDisplayMonthIndex(this.state.displayMonth, this.state.displayYear);
+      this.setState((state, props) => {
+        let budget = state.monthlyBudgets[j];
+        budget.expenses = [...budget.expenses.slice(0,i), ...budget.expenses.slice(i+1)];
+        state.monthlyBudgets[j] = budget;
+        return state;
+      })
+    }
+  }
+
   render() {
     let budgetForMonth = this.budgetForMonth(this.state.displayMonth, this.state.displayYear);
     let expensesForMonth = this.expensesForMonth(this.state.displayMonth, this.state.displayYear);
@@ -207,6 +221,7 @@ class App extends React.Component {
                 <td>{monthName} {expense.day} {yearName}</td>
                 <td>{expense.description} </td>
                 <td>${expense.amount.toFixed(2)}</td>
+                <td><button className="btn btn-primary" onClick={this.removeExpense(i)}>-</button></td>
               </tr>
             )
           })}
