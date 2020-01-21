@@ -1,4 +1,5 @@
 import React from 'react';
+import { demoState } from './demoState.js';
 import './css/index.css';
 import './css/month-display.css';
 import './css/table.css';
@@ -26,24 +27,29 @@ class App extends React.Component {
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth() + 1;
     let currentYear = currentDate.getFullYear();
-    this.state = {
-      newExpense: {
-        day: 1,
-        description: '',
-        amount: '',
-      },
-      displayMonth: currentMonth,
-      displayYear: currentYear,
-      newBudgetAmount: "",
-      monthlyBudgets: [
-        {
-          month: currentMonth,
-          year: currentYear,
-          budget: 50000, //should be rounded to 2 decimal places
-          expenses: [],
-        }
-      ]
+    if (props.useDemoState) {
+      this.state = demoState;
+    } else {
+      this.state = {
+        newExpense: {
+          day: 1,
+          description: '',
+          amount: '',
+        },
+        displayMonth: currentMonth,
+        displayYear: currentYear,
+        newBudgetAmount: "",
+        monthlyBudgets: [
+          {
+            month: currentMonth,
+            year: currentYear,
+            budget: 50000, //should be rounded to 2 decimal places
+            expenses: [],
+          }
+        ]
+      }
     }
+
 
     this.getMonthName = this.getMonthName.bind(this);
     this.budgetForMonth = this.budgetForMonth.bind(this);
