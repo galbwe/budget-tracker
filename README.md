@@ -1,4 +1,4 @@
-#Budget Calculator
+# Budget Calculator
 
 This is a simple react app that allows someone to track their financial goals over several months.
 
