@@ -84,7 +84,7 @@ export const demoState = {
         {
           day: 5,
           amount: 1153.32,
-          description: 'rent'
+          description: 'groceries'
         }
       ]
     },
