@@ -1,10 +1,14 @@
 import React from 'react';
 import { demoState } from './demoState.js';
-import './css/index.css';
-import './css/month-display.css';
-import './css/table.css';
-import './css/add-expense-form.css';
-import './css/change-budget-form.css'
+import NewExpenseForm from './NewExpenseForm.js';
+import TargetBudgetRow from './TargetBudgetRow.js';
+import ExpensesTable from './ExpensesTable.js';
+import MonthDisplay from './MonthDisplay.js';
+import '../css/index.css';
+import '../css/month-display.css';
+import '../css/table.css';
+import '../css/add-expense-form.css';
+import '../css/change-budget-form.css'
 
 const MONTH_NAMES = [
   'January',
@@ -62,7 +66,6 @@ class App extends React.Component {
     this.updateNewExpenseAmount = this.updateNewExpenseAmount.bind(this);
     this.removeExpense = this.removeExpense.bind(this);
     this.editCurrentTargetBudget = this.editCurrentTargetBudget.bind(this);
-    this.renderTargetBudget = this.renderTargetBudget.bind(this);
     this.toggleEditBudgetField = this.toggleEditBudgetField.bind(this);
     this.updateNewBudgetAmount = this.updateNewBudgetAmount.bind(this);
     this.handleNewBudgetSubmit = this.handleNewBudgetSubmit.bind(this);
@@ -282,36 +285,24 @@ class App extends React.Component {
     this.toggleEditBudgetField();
   }
 
-  renderTargetBudget(budgetForMonth) {
-    if (!this.state.showEditBudgetField) {
-      return (
-        <tr>
-          <td>Target Budget</td>
-          <td className="point-on-hover" title="double click to edit" onDoubleClick={this.toggleEditBudgetField}>${budgetForMonth}</td>
-        </tr>
-      )
+  getListOfDaysInMonth() {
+    let year = this.state.displayYear;
+    let month = this.state.displayMonth;
+    let numberOfDays = new Date(year, month, 0).getDate();
+    let daysInMonth = [];
+    for (let i = 1; i <= numberOfDays; i++) {
+      daysInMonth.push(i);
     }
-    return (
-      <tr className="change-budget-form">
-        <td>Target Budget</td>
-        <td>
-          <form className="form-inline">
-            <input value={this.state.newBudgetAmount} onChange={this.updateNewBudgetAmount} className="form-control" type="text" placeholder="New budget amount." />
-            <div className="button-group">
-              <button onClick={this.handleNewBudgetSubmit} className="btn btn-dark">Submit</button>
-              <button onClick={this.handleNewBudgetBack} className="btn btn-dark">Back</button>
-            </div>
-          </form>
-        </td>
-      </tr>
-    )
+    return daysInMonth;
   }
 
   render() {
-    let budgetForMonth = this.budgetForMonth(this.state.displayMonth, this.state.displayYear);
-    let expensesForMonth = this.expensesForMonth(this.state.displayMonth, this.state.displayYear);
-    let monthName = this.getMonthName(this.state.displayMonth);
-    let yearName = this.state.displayYear;
+    let month = this.state.displayMonth;
+    let year = this.state.displayYear;
+    let budgetForMonth = this.budgetForMonth(month, year);
+    let expensesForMonth = this.expensesForMonth(month, year);
+    let monthName = this.getMonthName(month);
+    let yearName = year;
     let totalExpensesForCurrentMonth = expensesForMonth
       .reduce((agg, next) => {
         return agg + next.amount
@@ -319,22 +310,29 @@ class App extends React.Component {
     let budgetLeft = budgetForMonth - totalExpensesForCurrentMonth;
     // oversimplified. Will need to modifiy later to account for number of days
     // in each month
-    let daysInMonth = [];
-    for (let i = 1; i < 32; i++) {
-      daysInMonth.push(i);
-    }
+
 
     return (
       <div className="App container">
-        <div className="month-display">
-          <button className="btn btn-light" onClick={this.displayPreviousMonth}>Last Month</button>
-          <h1 className="header-light">{monthName} {yearName}</h1>
-          <button className="btn btn-light" onClick={this.displayNextMonth}>Next Month</button>
-        </div>
+
+        <MonthDisplay
+          displayPreviousMonth = {this.displayPreviousMonth}
+          displayNextMonth = {this.displayNextMonth}
+          monthName={monthName}
+          yearName = {yearName}
+        />
 
         <table className="table">
           <tbody>
-            {this.renderTargetBudget(budgetForMonth)}
+            <TargetBudgetRow
+              showEditBudgetField = {this.state.showEditBudgetField}
+              toggleEditBudgetField = {this.toggleEditBudgetField}
+              budgetForMonth = {budgetForMonth}
+              newBudgetAmount = {this.state.newBudgetAmount}
+              updateNewBudgetAmount = {this.updateNewBudgetAmount}
+              handleNewBudgetSubmit = {this.handleNewBudgetSubmit}
+              handleNewBudgetBack = {this.handleNewBudgetBack}
+            />
             <tr>
               <td>Total Expenses</td>
               <td>${totalExpensesForCurrentMonth.toFixed(2)}</td>
@@ -345,50 +343,23 @@ class App extends React.Component {
             </tr>
           </tbody>
         </table>
+        <NewExpenseForm
+         updateNewExpenseDay={this.updateNewExpenseDay}
+         daysInMonth={this.getListOfDaysInMonth()}
+         addNewExpense={this.addNewExpense}
+         updateNewExpenseDescription={this.updateNewExpenseDescription}
+         updateNewExpenseAmount={this.updateNewExpenseAmount}
+         amount={this.state.newExpense.amount}
+         description={this.state.newExpense.description}
+         />
 
-        <form className="new-expense-form">
-          <fieldset>
-            <legend>Enter New Expense:</legend>
-            <div className="form-group">
-              <label for="new-expense-day">Day</label>
-              <select id="new-expense-day" className="custom-select" onChange={this.updateNewExpenseDay}>
-                {daysInMonth.map(i => {
-                  return <option key={`day-${i}`} value>{i}</option>
-                })}
-              </select>
-            </div>
-            <div className="form-group">
-              <label for="new-expense-description">Description</label>
-              <input id="new-expense-description" type="text" className="form-control" value={this.state.newExpense.description} placeholder="Describe Expense" onChange={this.updateNewExpenseDescription}/>
-            </div>
-            <div className="form-group">
-              <label for="new-expense-amount">Amount</label>
-              <input id="new-expense-amount" type="text" className="form-control" value={this.state.newExpense.amount} placeholder="$9999.99" onChange={this.updateNewExpenseAmount}/>
-            </div>
-            <button type="submit" className="btn btn-dark" onClick={this.addNewExpense}>Add Expense</button>
-          </fieldset>
-        </form>
+        <ExpensesTable
+          expensesForMonth={expensesForMonth}
+          removeExpense={this.removeExpense}
+          monthName={monthName}
+          yearName={yearName}
+        />
 
-        <table className="table">
-          <thead>
-            <tr>
-              <td>Date</td>
-              <td>Description</td>
-              <td>Amount</td>
-            </tr>
-          </thead>
-          <tbody>
-          {expensesForMonth.map((expense, i) => {
-            return (
-              <tr key={`expense-${i}`}>
-                <td>{monthName} {expense.day} {yearName}</td>
-                <td>{expense.description} </td>
-                <td>${expense.amount.toFixed(2)} <button className="btn btn-danger" onClick={this.removeExpense(i)}>-</button></td>
-              </tr>
-            )
-          })}
-          </tbody>
-        </table>
       </div>
     );
   }
