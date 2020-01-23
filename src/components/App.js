@@ -3,6 +3,7 @@ import { demoState } from './demoState.js';
 import NewExpenseForm from './NewExpenseForm.js';
 import TargetBudgetRow from './TargetBudgetRow.js';
 import ExpensesTable from './ExpensesTable.js';
+import MonthDisplay from './MonthDisplay.js';
 import '../css/index.css';
 import '../css/month-display.css';
 import '../css/table.css';
@@ -313,11 +314,13 @@ class App extends React.Component {
 
     return (
       <div className="App container">
-        <div className="month-display">
-          <button className="btn btn-light" onClick={this.displayPreviousMonth}>Last Month</button>
-          <h1 className="header-light">{monthName} {yearName}</h1>
-          <button className="btn btn-light" onClick={this.displayNextMonth}>Next Month</button>
-        </div>
+
+        <MonthDisplay
+          displayPreviousMonth = {this.displayPreviousMonth}
+          displayNextMonth = {this.displayNextMonth}
+          monthName={monthName}
+          yearName = {yearName}
+        />
 
         <table className="table">
           <tbody>
