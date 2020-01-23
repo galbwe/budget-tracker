@@ -1,10 +1,11 @@
 import React from 'react';
 import { demoState } from './demoState.js';
-import './css/index.css';
-import './css/month-display.css';
-import './css/table.css';
-import './css/add-expense-form.css';
-import './css/change-budget-form.css'
+import NewExpenseForm from './NewExpenseForm.js';
+import '../css/index.css';
+import '../css/month-display.css';
+import '../css/table.css';
+import '../css/add-expense-form.css';
+import '../css/change-budget-form.css'
 
 const MONTH_NAMES = [
   'January',
@@ -307,6 +308,20 @@ class App extends React.Component {
     )
   }
 
+  getListOfDaysInMonth() {
+    let year = this.state.displayYear;
+    let month = this.state.displayMonth;
+    let numberOfDays = new Date(year, month, 0).getDate();
+    console.log(year);
+    console.log(month);
+    console.log(numberOfDays);
+    let daysInMonth = [];
+    for (let i = 1; i <= numberOfDays; i++) {
+      daysInMonth.push(i);
+    }
+    return daysInMonth;
+  }
+
   render() {
     let budgetForMonth = this.budgetForMonth(this.state.displayMonth, this.state.displayYear);
     let expensesForMonth = this.expensesForMonth(this.state.displayMonth, this.state.displayYear);
@@ -319,10 +334,7 @@ class App extends React.Component {
     let budgetLeft = budgetForMonth - totalExpensesForCurrentMonth;
     // oversimplified. Will need to modifiy later to account for number of days
     // in each month
-    let daysInMonth = [];
-    for (let i = 1; i < 32; i++) {
-      daysInMonth.push(i);
-    }
+
 
     return (
       <div className="App container">
@@ -345,29 +357,15 @@ class App extends React.Component {
             </tr>
           </tbody>
         </table>
-
-        <form className="new-expense-form">
-          <fieldset>
-            <legend>Enter New Expense:</legend>
-            <div className="form-group">
-              <label for="new-expense-day">Day</label>
-              <select id="new-expense-day" className="custom-select" onChange={this.updateNewExpenseDay}>
-                {daysInMonth.map(i => {
-                  return <option key={`day-${i}`} value>{i}</option>
-                })}
-              </select>
-            </div>
-            <div className="form-group">
-              <label for="new-expense-description">Description</label>
-              <input id="new-expense-description" type="text" className="form-control" value={this.state.newExpense.description} placeholder="Describe Expense" onChange={this.updateNewExpenseDescription}/>
-            </div>
-            <div className="form-group">
-              <label for="new-expense-amount">Amount</label>
-              <input id="new-expense-amount" type="text" className="form-control" value={this.state.newExpense.amount} placeholder="$9999.99" onChange={this.updateNewExpenseAmount}/>
-            </div>
-            <button type="submit" className="btn btn-dark" onClick={this.addNewExpense}>Add Expense</button>
-          </fieldset>
-        </form>
+        <NewExpenseForm
+         updateNewExpenseDay={this.updateNewExpenseDay}
+         daysInMonth={this.getListOfDaysInMonth()}
+         addNewExpense={this.addNewExpense}
+         updateNewExpenseDescription={this.updateNewExpenseDescription}
+         updateNewExpenseAmount={this.updateNewExpenseAmount}
+         amount={this.state.newExpense.amount}
+         description={this.state.newExpense.description}
+         />
 
         <table className="table">
           <thead>
