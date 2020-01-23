@@ -1,7 +1,8 @@
 import React from 'react';
 import { demoState } from './demoState.js';
 import NewExpenseForm from './NewExpenseForm.js';
-import TargetBudgetRow from './TargetBudgetRow.js'
+import TargetBudgetRow from './TargetBudgetRow.js';
+import ExpensesTable from './ExpensesTable.js';
 import '../css/index.css';
 import '../css/month-display.css';
 import '../css/table.css';
@@ -295,10 +296,12 @@ class App extends React.Component {
   }
 
   render() {
-    let budgetForMonth = this.budgetForMonth(this.state.displayMonth, this.state.displayYear);
-    let expensesForMonth = this.expensesForMonth(this.state.displayMonth, this.state.displayYear);
-    let monthName = this.getMonthName(this.state.displayMonth);
-    let yearName = this.state.displayYear;
+    let month = this.state.displayMonth;
+    let year = this.state.displayYear;
+    let budgetForMonth = this.budgetForMonth(month, year);
+    let expensesForMonth = this.expensesForMonth(month, year);
+    let monthName = this.getMonthName(month);
+    let yearName = year;
     let totalExpensesForCurrentMonth = expensesForMonth
       .reduce((agg, next) => {
         return agg + next.amount
@@ -347,26 +350,13 @@ class App extends React.Component {
          description={this.state.newExpense.description}
          />
 
-        <table className="table">
-          <thead>
-            <tr>
-              <td>Date</td>
-              <td>Description</td>
-              <td>Amount</td>
-            </tr>
-          </thead>
-          <tbody>
-          {expensesForMonth.map((expense, i) => {
-            return (
-              <tr key={`expense-${i}`}>
-                <td>{monthName} {expense.day} {yearName}</td>
-                <td>{expense.description} </td>
-                <td>${expense.amount.toFixed(2)} <button className="btn btn-danger" onClick={this.removeExpense(i)}>-</button></td>
-              </tr>
-            )
-          })}
-          </tbody>
-        </table>
+        <ExpensesTable
+          expensesForMonth={expensesForMonth}
+          removeExpense={this.removeExpense}
+          monthName={monthName}
+          yearName={yearName}
+        />
+
       </div>
     );
   }
