@@ -1,6 +1,7 @@
 import React from 'react';
 import { demoState } from './demoState.js';
 import NewExpenseForm from './NewExpenseForm.js';
+import TargetBudgetRow from './TargetBudgetRow.js'
 import '../css/index.css';
 import '../css/month-display.css';
 import '../css/table.css';
@@ -63,7 +64,6 @@ class App extends React.Component {
     this.updateNewExpenseAmount = this.updateNewExpenseAmount.bind(this);
     this.removeExpense = this.removeExpense.bind(this);
     this.editCurrentTargetBudget = this.editCurrentTargetBudget.bind(this);
-    this.renderTargetBudget = this.renderTargetBudget.bind(this);
     this.toggleEditBudgetField = this.toggleEditBudgetField.bind(this);
     this.updateNewBudgetAmount = this.updateNewBudgetAmount.bind(this);
     this.handleNewBudgetSubmit = this.handleNewBudgetSubmit.bind(this);
@@ -283,38 +283,10 @@ class App extends React.Component {
     this.toggleEditBudgetField();
   }
 
-  renderTargetBudget(budgetForMonth) {
-    if (!this.state.showEditBudgetField) {
-      return (
-        <tr>
-          <td>Target Budget</td>
-          <td className="point-on-hover" title="double click to edit" onDoubleClick={this.toggleEditBudgetField}>${budgetForMonth}</td>
-        </tr>
-      )
-    }
-    return (
-      <tr className="change-budget-form">
-        <td>Target Budget</td>
-        <td>
-          <form className="form-inline">
-            <input value={this.state.newBudgetAmount} onChange={this.updateNewBudgetAmount} className="form-control" type="text" placeholder="New budget amount." />
-            <div className="button-group">
-              <button onClick={this.handleNewBudgetSubmit} className="btn btn-dark">Submit</button>
-              <button onClick={this.handleNewBudgetBack} className="btn btn-dark">Back</button>
-            </div>
-          </form>
-        </td>
-      </tr>
-    )
-  }
-
   getListOfDaysInMonth() {
     let year = this.state.displayYear;
     let month = this.state.displayMonth;
     let numberOfDays = new Date(year, month, 0).getDate();
-    console.log(year);
-    console.log(month);
-    console.log(numberOfDays);
     let daysInMonth = [];
     for (let i = 1; i <= numberOfDays; i++) {
       daysInMonth.push(i);
@@ -346,7 +318,15 @@ class App extends React.Component {
 
         <table className="table">
           <tbody>
-            {this.renderTargetBudget(budgetForMonth)}
+            <TargetBudgetRow
+              showEditBudgetField = {this.state.showEditBudgetField}
+              toggleEditBudgetField = {this.toggleEditBudgetField}
+              budgetForMonth = {budgetForMonth}
+              newBudgetAmount = {this.state.newBudgetAmount}
+              updateNewBudgetAmount = {this.updateNewBudgetAmount}
+              handleNewBudgetSubmit = {this.handleNewBudgetSubmit}
+              handleNewBudgetBack = {this.handleNewBudgetBack}
+            />
             <tr>
               <td>Total Expenses</td>
               <td>${totalExpensesForCurrentMonth.toFixed(2)}</td>

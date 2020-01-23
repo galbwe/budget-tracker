@@ -1,7 +1,6 @@
 import React from 'react';
 
 const NewExpenseForm = (props) => {
-  console.log(props);
   return (
     <form className="new-expense-form">
       <fieldset>
