@@ -1,14 +1,14 @@
 import React from 'react';
 import { demoState } from './demoState.js';
 import NewExpenseForm from './NewExpenseForm.js';
-import TargetBudgetRow from './TargetBudgetRow.js';
+import BudgetSummaryTable from './BudgetSummaryTable.js';
 import ExpensesTable from './ExpensesTable.js';
 import MonthDisplay from './MonthDisplay.js';
 import '../css/index.css';
 import '../css/month-display.css';
 import '../css/table.css';
 import '../css/add-expense-form.css';
-import '../css/change-budget-form.css'
+import '../css/change-budget-form.css';
 
 const MONTH_NAMES = [
   'January',
@@ -322,27 +322,18 @@ class App extends React.Component {
           yearName = {yearName}
         />
 
-        <table className="table">
-          <tbody>
-            <TargetBudgetRow
-              showEditBudgetField = {this.state.showEditBudgetField}
-              toggleEditBudgetField = {this.toggleEditBudgetField}
-              budgetForMonth = {budgetForMonth}
-              newBudgetAmount = {this.state.newBudgetAmount}
-              updateNewBudgetAmount = {this.updateNewBudgetAmount}
-              handleNewBudgetSubmit = {this.handleNewBudgetSubmit}
-              handleNewBudgetBack = {this.handleNewBudgetBack}
-            />
-            <tr>
-              <td>Total Expenses</td>
-              <td>${totalExpensesForCurrentMonth.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>Budget Left</td>
-              <td>${budgetLeft.toFixed(2)}</td>
-            </tr>
-          </tbody>
-        </table>
+        <BudgetSummaryTable
+          showEditBudgetField = {this.state.showEditBudgetField}
+          toggleEditBudgetField = {this.toggleEditBudgetField}
+          budgetForMonth = {budgetForMonth}
+          newBudgetAmount = {this.state.newBudgetAmount}
+          updateNewBudgetAmount = {this.updateNewBudgetAmount}
+          handleNewBudgetSubmit = {this.handleNewBudgetSubmit}
+          handleNewBudgetBack = {this.handleNewBudgetBack}
+          totalExpensesForCurrentMonth={totalExpensesForCurrentMonth}
+          budgetLeft={budgetLeft}
+        />
+
         <NewExpenseForm
          updateNewExpenseDay={this.updateNewExpenseDay}
          daysInMonth={this.getListOfDaysInMonth()}
