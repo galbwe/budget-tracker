@@ -51,5 +51,20 @@ api.get('/api/v1/monthly-budgets/:id', (req, res) => {
   })
 });
 
+api.delete('/api/v1/expenses/:id', (req, res) => {
+  models.Expense.findById(req.params.id, (err, expense) => {
+    expense.deleteOne();
+    res.json(expense);
+  })
+});
+
+api.delete('/api/v1/monthly-budgets/:id', (req, res) => {
+  models.MonthlyBudget.findById(req.params.id, (err, monthlyBudget) => {
+    monthlyBudget.deleteOne();
+    res.json(monthlyBudget);
+  })
+});
+
+
 
 api.listen(port, () => console.log('API listening on port ' + port));
