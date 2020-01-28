@@ -19,12 +19,12 @@ api.get('/api/v1/expenses', (req, res) => {
 
 api.get('/api/v1/monthly-budgets', (req, res) => {
   models.MonthlyBudget.find((err, budgets) => {
-    res.json(expenses);
+    res.json(budgets);
   })
 })
 
 api.post('/api/v1/expenses', jsonParser, (req, res) => {
-  expense = new models.Expense(req.body);
+  let expense = new models.Expense(req.body);
   expense.save();
   let data = req.body;
   data.id = expense._id;
@@ -32,12 +32,24 @@ api.post('/api/v1/expenses', jsonParser, (req, res) => {
 })
 
 api.post('/api/v1/monthly-budgets', jsonParser, (req, res) => {
-  budget = new models.MonthlyBudget(req.body);
+  let budget = new models.MonthlyBudget(req.body);
   budget.save();
   let data = req.body;
   data.id = budget._id;
   res.send(data);
 })
+
+api.get('/api/v1/expenses/:id', (req, res) => {
+  models.Expense.findById(req.params.id, (err, expense) => {
+    res.json(expense);
+  })
+});
+
+api.get('/api/v1/monthly-budgets/:id', (req, res) => {
+  models.MonthlyBudget.findById(req.params.id, (err, budget) => {
+    res.json(budget);
+  })
+});
 
 
 api.listen(port, () => console.log('API listening on port ' + port));
