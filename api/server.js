@@ -65,6 +65,29 @@ api.delete('/api/v1/monthly-budgets/:id', (req, res) => {
   })
 });
 
+api.put('/api/v1/expenses/:id', jsonParser, (req, res) => {
+  models.Expense.findById(req.params.id, (err, expense) => {
+    expense._id = req.params.id;
+    expense.day = req.body.day;
+    expense.year = req.body.year;
+    expense.month = req.body.month;
+    expense.amount = req.body.amount;
+    expense.description = req.body.description;
+    expense.save();
+    res.json(expense);
+  })
+});
+
+api.put('/api/v1/monthly-budgets/:id', jsonParser, (req, res) => {
+  models.MontlyBudget.findById(req.params.id, (err, budget) => {
+    budget._id = req.params.id;
+    budget.year = req.body.year;
+    budget.month = req.body.month;
+    budget.budget = req.body.budget;
+    budget.save();
+    res.json(budget);
+  })
+});
 
 
 api.listen(port, () => console.log('API listening on port ' + port));
