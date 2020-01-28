@@ -18,3 +18,8 @@ const monthlyBudgetSchema = new mongoose.Schema({
 });
 
 const MonthlyBudget = mongoose.model('MonthlyBudget', monthlyBudgetSchema);
+
+module.exports = {
+  Expense,
+  MonthlyBudget
+}
