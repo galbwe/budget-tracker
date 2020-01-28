@@ -1,0 +1,22 @@
+{
+  "name": "budget-tracker",
+  "version": "1.0.0",
+  "description": "App for creating budgets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/galbwe/budget-tracker.git"
+  },
+  "author": "Wes Galbraith",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/galbwe/budget-tracker/issues"
+  },
+  "homepage": "https://github.com/galbwe/budget-tracker#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
+}
