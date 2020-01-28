@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/galbwe/budget-tracker#readme",
   "devDependencies": {
-    "gulp": "^4.0.2"
+    "gulp": "^4.0.2",
+    "gulp-live-server": "0.0.31",
+    "gulp-watch": "^5.0.1"
   }
 }
