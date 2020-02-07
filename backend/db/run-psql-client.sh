@@ -1,3 +1,3 @@
 #! /bin/bash
 
-psql -h localhost -p 5432 -U postgres -W
+psql -h localhost -p 5433 -U postgres -W
