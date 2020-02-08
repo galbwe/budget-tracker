@@ -20,7 +20,6 @@ def read_csv(file, floats=None, dates=None):
         result = [tuple(headers)]
         for row in reader:
             parsed_row = []
-            print(row)
             for i, e in enumerate(row):
                 if i in float_columns:
                     parsed_row.append(float(e))
@@ -32,8 +31,8 @@ def read_csv(file, floats=None, dates=None):
         return result
 
 
-if __name__ == '__main__':
-    # test
-    file = '../db/data/dev-data.csv'
-    data = read_csv(file, floats=['amount'], dates=['date'])
-    print(data)
+# if __name__ == '__main__':
+#     # test
+#     file = '../../db/data/dev-data.csv'
+#     data = read_csv(file, floats=['amount'], dates=['date'])
+#     print(data)
